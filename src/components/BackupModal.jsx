@@ -88,7 +88,7 @@ export const BackupModal = ({ isOpen, onClose, onRefreshData, settings, onSaveSe
             1. Ekspor Backup Data (JSON)
           </div>
           <p style={{ fontSize: '12px', opacity: 0.9, marginBottom: '10px' }}>
-            Simpan file cadangan semua kendaraan, KM oli, dan catatan hutang ke memori HP.
+            Simpan file cadangan semua data kendaraan dan KM oli ke memori HP.
           </p>
           <button 
             className="hn-btn-primary"
@@ -117,30 +117,6 @@ export const BackupModal = ({ isOpen, onClose, onRefreshData, settings, onSaveSe
               style={{ display: 'none' }} 
             />
           </label>
-        </div>
-
-        {/* Daily KM Estimation Setting */}
-        <div className="hn-card" style={{ padding: '14px' }}>
-          <div style={{ fontWeight: '800', fontSize: '14px', marginBottom: '4px' }}>
-            3. Estimasi KM Harian
-          </div>
-          <p style={{ fontSize: '12px', opacity: 0.9, marginBottom: '10px' }}>
-            Perkiraan jarak tempuh harian (KM/hari) untuk menghitung sisa waktu ganti oli.
-          </p>
-          <form onSubmit={handleSaveDailyKm} style={{ display: 'flex', gap: '8px' }}>
-            <input 
-              type="number"
-              className="hn-input"
-              style={{ flex: 1, padding: '8px 12px' }}
-              value={dailyKmInput}
-              onChange={e => setDailyKmInput(e.target.value)}
-              placeholder="35"
-              required
-            />
-            <button type="submit" className="hn-btn-primary" style={{ padding: '8px 14px', fontSize: '12px' }}>
-              Simpan
-            </button>
-          </form>
         </div>
 
         <div style={{ marginTop: '20px', textAlign: 'center' }}>

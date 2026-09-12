@@ -100,17 +100,9 @@ export default function App() {
         )}
 
 
-        {activeTab === 'debt' && (
-          <DebtTrackerView 
-            debts={debts}
-            onSaveDebts={handleSaveDebts}
-          />
-        )}
-
         {activeTab === 'notifikasi' && (
           <NotifikasiView 
             vehicles={vehicles}
-            debts={debts}
             onNavigate={setActiveTab}
           />
         )}

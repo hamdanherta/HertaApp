@@ -90,34 +90,6 @@ export const HamburgerMenu = ({ isOpen, onClose, onSelectMenu }) => {
               </div>
               <div>
                 <div style={{ fontSize: '15px', fontWeight: '800', color: '#005BAB' }}>Catatan Ganti Oli</div>
-                <div style={{ fontSize: '11px', color: '#005BAB', opacity: 0.85, marginTop: '2px' }}>Odometer meter & patokan KM</div>
-              </div>
-            </div>
-            <ChevronRight size={18} color="#005BAB" />
-          </button>
-
-          {/* Feature 2: Catatan Hutang & Piutang */}
-          <button 
-            className="hn-card"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '14px',
-              textAlign: 'left',
-              backgroundColor: '#FFF3DD',
-              color: '#005BAB',
-              cursor: 'pointer'
-            }}
-            onClick={() => handleMenuClick('debt')}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ padding: '8px', backgroundColor: '#FFFFFF', borderRadius: '10px', border: '1.5px solid #005BAB', color: '#005BAB' }}>
-                <HandCoins size={22} color="#005BAB" />
-              </div>
-              <div>
-                <div style={{ fontSize: '15px', fontWeight: '800', color: '#005BAB' }}>Hutang & Piutang</div>
-                <div style={{ fontSize: '11px', color: '#005BAB', opacity: 0.85, marginTop: '2px' }}>Peminjaman uang, barang & cicilan</div>
               </div>
             </div>
             <ChevronRight size={18} color="#005BAB" />

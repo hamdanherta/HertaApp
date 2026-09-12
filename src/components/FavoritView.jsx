@@ -20,7 +20,7 @@ export const FavoritView = ({ onNavigate }) => {
         <Heart size={42} style={{ margin: '0 auto 10px', display: 'block' }} />
         <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Belum Ada Catatan Favorit</h3>
         <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px', marginBottom: '16px' }}>
-          Tandai kendaraan atau catatan hutang penting Anda sebagai favorit agar muncul di sini.
+          Tandai kendaraan penting Anda sebagai favorit agar muncul di sini.
         </p>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
@@ -30,13 +30,6 @@ export const FavoritView = ({ onNavigate }) => {
             onClick={() => onNavigate('oil')}
           >
             <Gauge size={14} /> Ganti Oli
-          </button>
-          <button 
-            className="hn-btn-outline" 
-            style={{ fontSize: '12px', padding: '8px 12px' }}
-            onClick={() => onNavigate('debt')}
-          >
-            <HandCoins size={14} /> Hutang
           </button>
         </div>
       </div>

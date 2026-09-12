@@ -67,91 +67,93 @@ export const NotifikasiView = ({ vehicles = [], onNavigate }) => {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {notificationVehicles.map(v => (
-            <div key={v.id} className="hn-card" style={{ backgroundColor: '#FFF3DD', padding: '18px' }}>
-              
-              {/* Header: Warning Title & Small Vehicle Badge (Identical to Beranda Card) */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <ShieldAlert size={20} color="#005BAB" />
-                  <span style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', letterSpacing: '0.5px' }}>
-                    Peringatan Ganti Oli
-                  </span>
-                </div>
+          {notificationVehicles.map(v => {
+            const intervalGardan = parseInt(v.intervalGardan || 3000, 10);
+            const lastGardanLog = v.history ? v.history.find(h => h.gantiGardan) : null;
+            const lastGardanKm = lastGardanLog ? lastGardanLog.km : (v.lastOilKm || 0);
+            const nextGardanKm = lastGardanKm + intervalGardan;
+            const isGardanNeeded = v.targetKm >= nextGardanKm;
 
-                {/* Small Vehicle Label Badge (Scoopy Keong / BH 6043 OX below) */}
-                <div className="hn-badge-cream" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '6px 10px', lineHeight: '1.2' }}>
-                  <span style={{ fontSize: '12px', fontWeight: '800' }}>
-                    🏍️ {v.name}
-                  </span>
-                  <span style={{ fontSize: '10px', opacity: 0.85, fontWeight: '700' }}>
-                    ({v.licensePlate || 'BH 6043 OX'})
-                  </span>
-                </div>
-              </div>
-
-              {/* Big KM Hierarchy Numbers Container */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr auto 1fr', 
-                alignItems: 'center', 
-                gap: '10px', 
-                marginTop: '14px', 
-                backgroundColor: '#FFFFFF', 
-                padding: '14px 12px', 
-                borderRadius: '16px', 
-                border: '2px solid #005BAB',
-                boxShadow: '2px 2px 0px #005BAB'
-              }}>
-                {/* Last Oil KM */}
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
-                    Oli Terakhir
+            return (
+              <div key={v.id} className="hn-card" style={{ backgroundColor: '#FFF3DD', padding: '18px' }}>
+                
+                {/* Header: Nama Kendaraan (Left) & Label Harus Oli Gardan Atau Tidak (Right) */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#005BAB', margin: 0 }}>
+                      🏍️ {v.name} <span style={{ fontSize: '12px', fontWeight: '600', opacity: 0.85 }}>({v.licensePlate || 'BH 6043 OX'})</span>
+                    </h3>
                   </div>
-                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB', marginTop: '2px' }}>
-                    {formatKm(v.lastOil)}
+
+                  <div style={{
+                    backgroundColor: isGardanNeeded ? '#005BAB' : '#FFFFFF',
+                    color: isGardanNeeded ? '#FFF3DD' : '#005BAB',
+                    border: '2px solid #005BAB',
+                    padding: '6px 12px',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    fontWeight: '800',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}>
+                    ⚙️ {isGardanNeeded ? 'Harus Oli Gardan' : 'Hanya Oli Mesin'}
                   </div>
                 </div>
 
-                {/* Arrow Divider */}
-                <div style={{ color: '#005BAB', opacity: 0.6 }}>
-                  <ArrowRight size={20} />
+                {/* Big KM Numbers Box: KM Ganti Oli Terakhir & KM Ganti Oli Selanjutnya */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr auto 1fr', 
+                  alignItems: 'center', 
+                  gap: '10px', 
+                  marginTop: '14px', 
+                  backgroundColor: '#FFFFFF', 
+                  padding: '16px 12px', 
+                  borderRadius: '20px', 
+                  border: '2px solid #005BAB',
+                  boxShadow: '2px 2px 0px #005BAB'
+                }}>
+                  {/* Last Oil KM */}
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
+                      Oli Terakhir
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: '900', color: '#005BAB', marginTop: '2px' }}>
+                      {formatKm(v.lastOil)}
+                    </div>
+                  </div>
+
+                  {/* Arrow Divider */}
+                  <div style={{ color: '#005BAB', opacity: 0.6 }}>
+                    <ArrowRight size={22} />
+                  </div>
+
+                  {/* Next Target KM */}
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
+                      Target Selanjutnya
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: '900', color: '#005BAB', marginTop: '2px' }}>
+                      {formatKm(v.targetKm)}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Next Target KM (Big Bold Font) */}
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
-                    Target Selanjutnya
-                  </div>
-                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB', marginTop: '2px' }}>
-                    {formatKm(v.targetKm)}
-                  </div>
+                {/* Action Button: Buka Catatan Ganti Oli */}
+                <div style={{ marginTop: '14px' }}>
+                  <button 
+                    className="hn-btn-primary" 
+                    style={{ width: '100%', padding: '12px', fontSize: '14px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    onClick={() => onNavigate('oil')}
+                  >
+                    <Gauge size={16} /> Buka Catatan Ganti Oli
+                  </button>
                 </div>
-              </div>
 
-              {/* 30-Day Reminder Badge Info & Interval */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px', fontSize: '11px', fontWeight: '700' }}>
-                <span className="hn-badge-solid" style={{ fontSize: '11px' }}>
-                  <Clock size={12} /> {v.reason}
-                </span>
-                <span className="hn-badge-outline" style={{ fontSize: '11px' }}>
-                  <Gauge size={12} /> Patokan: {formatKm(v.interval)}
-                </span>
               </div>
-
-              {/* Action Button */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '14px' }}>
-                <button 
-                  className="hn-btn-primary" 
-                  style={{ padding: '8px 16px', fontSize: '12px' }}
-                  onClick={() => onNavigate('oil')}
-                >
-                  <Gauge size={14} /> Buka Catatan Oli
-                </button>
-              </div>
-
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

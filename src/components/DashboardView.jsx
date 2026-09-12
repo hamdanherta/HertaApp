@@ -60,6 +60,14 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, applications = []
 
   const totalApps = applications.length;
   const interviewApps = applications.filter(a => a.status === 'Interview' || a.status === 'Tes' || a.status === 'Diterima').length;
+  const responseRate = totalApps > 0 ? Math.round((interviewApps / totalApps) * 100) : 0;
+
+  // Platform distribution
+  const platformCounts = applications.reduce((acc, app) => {
+    const key = app.platform || 'Lainnya';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '150px' }}>
@@ -77,7 +85,7 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, applications = []
         </p>
       </div>
 
-      {/* --- FITUR UTAMA 2: KARTU RINGKASAN CATATAN LAMARAN KERJA --- */}
+      {/* --- FITUR UTAMA 2: KARTU STATISTIK & DIAGRAM LAMARAN KERJA --- */}
       <div>
         <div style={{ marginBottom: '10px' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#005BAB' }}>
@@ -85,18 +93,19 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, applications = []
           </h3>
         </div>
 
-        <div className="hn-card" style={{ backgroundColor: '#FFF3DD' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="hn-card">
+          {/* Header Card */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '14px', border: '2px solid #005BAB' }}>
-                <Briefcase size={24} color="#005BAB" />
+              <div style={{ padding: '8px', backgroundColor: '#FFF3DD', borderRadius: '12px', border: '2px solid #005BAB' }}>
+                <Briefcase size={22} color="#005BAB" />
               </div>
               <div>
                 <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#005BAB' }}>
-                  Tracker Lamaran Kerja
+                  Statistik & Diagram Lamaran
                 </h4>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: '#005BAB', opacity: 0.9, marginTop: '2px' }}>
-                  {totalApps} Total Dilamar • {interviewApps} Respons Panggilan
+                <div style={{ fontSize: '12px', fontWeight: '600', color: '#005BAB', opacity: 0.85 }}>
+                  Ringkasan aktivitas pencarian kerja
                 </div>
               </div>
             </div>
@@ -109,6 +118,61 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, applications = []
               Buka Tracker <ChevronRight size={16} />
             </button>
           </div>
+
+          {/* Stat Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '14px' }}>
+            <div style={{ backgroundColor: '#FFF3DD', padding: '10px', borderRadius: '12px', border: '1.5px solid #005BAB', textAlign: 'center' }}>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB' }}>{totalApps}</div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#005BAB', marginTop: '2px' }}>Lamaran</div>
+            </div>
+            <div style={{ backgroundColor: '#FFF3DD', padding: '10px', borderRadius: '12px', border: '1.5px solid #005BAB', textAlign: 'center' }}>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB' }}>{interviewApps}</div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#005BAB', marginTop: '2px' }}>Respons</div>
+            </div>
+            <div style={{ backgroundColor: '#FFF3DD', padding: '10px', borderRadius: '12px', border: '1.5px solid #005BAB', textAlign: 'center' }}>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB' }}>{responseRate}%</div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#005BAB', marginTop: '2px' }}>Rate Panggilan</div>
+            </div>
+          </div>
+
+          {/* Platform Distribution Bar Diagram */}
+          {totalApps > 0 ? (
+            <div style={{ backgroundColor: '#FFF3DD', padding: '14px', borderRadius: '14px', border: '1.5px solid #005BAB' }}>
+              <div style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', marginBottom: '10px', color: '#005BAB' }}>
+                📊 Distribusi Sumber Lowongan
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {Object.entries(platformCounts).map(([platform, count]) => {
+                  const percent = Math.round((count / totalApps) * 100);
+                  return (
+                    <div key={platform} style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '700', color: '#005BAB' }}>
+                        <span>{platform} ({count})</span>
+                        <span>{percent}%</span>
+                      </div>
+                      <div className="hn-progress-track" style={{ height: '8px' }}>
+                        <div className="hn-progress-fill" style={{ width: `${percent}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div style={{ 
+              backgroundColor: '#FFF3DD', 
+              padding: '14px', 
+              borderRadius: '14px', 
+              border: '1.5px dashed #005BAB',
+              textAlign: 'center',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#005BAB'
+            }}>
+              Belum ada data lamaran. Klik <strong>Buka Tracker</strong> untuk mencatat lamaran pertama Anda.
+            </div>
+          )}
         </div>
       </div>
 

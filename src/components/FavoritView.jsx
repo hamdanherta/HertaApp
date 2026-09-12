@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Gauge, HandCoins, PlusCircle } from 'lucide-react';
+import { Heart, Gauge, Briefcase } from 'lucide-react';
 
 export const FavoritView = ({ onNavigate }) => {
   return (
@@ -20,7 +20,7 @@ export const FavoritView = ({ onNavigate }) => {
         <Heart size={42} style={{ margin: '0 auto 10px', display: 'block' }} />
         <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Belum Ada Catatan Favorit</h3>
         <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px', marginBottom: '16px' }}>
-          Tandai kendaraan penting Anda sebagai favorit agar muncul di sini.
+          Tandai catatan ganti oli atau lamaran kerja sebagai favorit.
         </p>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
@@ -30,6 +30,13 @@ export const FavoritView = ({ onNavigate }) => {
             onClick={() => onNavigate('oil')}
           >
             <Gauge size={14} /> Ganti Oli
+          </button>
+          <button 
+            className="hn-btn-outline" 
+            style={{ fontSize: '12px', padding: '8px 12px' }}
+            onClick={() => onNavigate('job')}
+          >
+            <Briefcase size={14} /> Lamaran Kerja
           </button>
         </div>
       </div>

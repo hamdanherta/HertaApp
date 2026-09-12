@@ -5,13 +5,14 @@
 const STORAGE_KEYS = {
   VEHICLES: 'hertnote_vehicles_v2',
   DEBTS: 'hertnote_debts_v2',
+  APPLICATIONS: 'hertnote_applications_v2',
   SETTINGS: 'hertnote_settings_v2',
   PATOKAN: 'hertnote_patokan_v2'
 };
 
 const DEFAULT_VEHICLES = [];
-
 const DEFAULT_DEBTS = [];
+const DEFAULT_APPLICATIONS = [];
 
 const DEFAULT_SETTINGS = {
   dailyKmEstimate: 35,
@@ -22,6 +23,24 @@ const DEFAULT_SETTINGS = {
 const DEFAULT_PATOKAN = null; // Kosong di awal!
 
 // Storage Utilities
+export const loadApplications = () => {
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.APPLICATIONS);
+    return data ? JSON.parse(data) : DEFAULT_APPLICATIONS;
+  } catch (err) {
+    console.error('Error loading applications:', err);
+    return DEFAULT_APPLICATIONS;
+  }
+};
+
+export const saveApplications = (applications) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.APPLICATIONS, JSON.stringify(applications));
+  } catch (err) {
+    console.error('Error saving applications:', err);
+  }
+};
+
 export const loadPatokan = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.PATOKAN);
@@ -102,6 +121,7 @@ export const clearAllData = () => {
   try {
     localStorage.setItem(STORAGE_KEYS.VEHICLES, JSON.stringify([]));
     localStorage.setItem(STORAGE_KEYS.DEBTS, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.APPLICATIONS, JSON.stringify([]));
     localStorage.removeItem(STORAGE_KEYS.PATOKAN);
   } catch (err) {
     console.error('Error clearing data:', err);
@@ -112,10 +132,11 @@ export const clearAllData = () => {
 export const exportDataJSON = () => {
   const data = {
     appName: 'Herta App',
-    version: '2.0.0',
+    version: '2.5.0',
     exportDate: new Date().toISOString(),
     patokan: loadPatokan(),
     vehicles: loadVehicles(),
+    applications: loadApplications(),
     debts: loadDebts(),
     settings: loadSettings()
   };
@@ -125,12 +146,13 @@ export const exportDataJSON = () => {
 export const importDataJSON = (jsonString) => {
   try {
     const data = JSON.parse(jsonString);
-    if (!data.vehicles || !data.debts) {
+    if (!data.vehicles && !data.applications) {
       throw new Error('Format file backup tidak valid. Pastikan file JSON dari Herta App.');
     }
     if (data.patokan !== undefined) savePatokan(data.patokan);
-    saveVehicles(data.vehicles);
-    saveDebts(data.debts);
+    if (data.vehicles) saveVehicles(data.vehicles);
+    if (data.applications) saveApplications(data.applications);
+    if (data.debts) saveDebts(data.debts);
     if (data.settings) saveSettings(data.settings);
     return { success: true, message: 'Data berhasil dipulihkan!' };
   } catch (err) {

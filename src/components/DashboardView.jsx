@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Gauge, Plus, CheckSquare, Square } from 'lucide-react';
+import { Gauge, Plus, CheckSquare, Square, Briefcase, ChevronRight, TrendingUp } from 'lucide-react';
 import { VehicleOilCard } from './VehicleOilCard';
 
-export const DashboardView = ({ vehicles = [], onSaveVehicles, settings = {}, setActiveTab }) => {
+export const DashboardView = ({ vehicles = [], onSaveVehicles, applications = [], settings = {}, setActiveTab }) => {
   // Modal for adding oil log directly from Beranda
   const [showLogOilModal, setShowLogOilModal] = useState(false);
   const [targetVehicle, setTargetVehicle] = useState(null);
@@ -58,6 +58,9 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, settings = {}, se
     setShowLogOilModal(false);
   };
 
+  const totalApps = applications.length;
+  const interviewApps = applications.filter(a => a.status === 'Interview' || a.status === 'Tes' || a.status === 'Diterima').length;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '150px' }}>
       
@@ -74,11 +77,46 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, settings = {}, se
         </p>
       </div>
 
-      {/* --- KARTU GANTI OLI (DI BERANDA - IDENTIK FRAME 264) --- */}
+      {/* --- FITUR UTAMA 2: KARTU RINGKASAN CATATAN LAMARAN KERJA --- */}
       <div>
         <div style={{ marginBottom: '10px' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#005BAB' }}>
-            Kartu Ganti Oli
+            FITUR UTAMA 2: CATATAN LAMARAN KERJA
+          </h3>
+        </div>
+
+        <div className="hn-card" style={{ backgroundColor: '#FFF3DD' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '14px', border: '2px solid #005BAB' }}>
+                <Briefcase size={24} color="#005BAB" />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#005BAB' }}>
+                  Tracker Lamaran Kerja
+                </h4>
+                <div style={{ fontSize: '12px', fontWeight: '700', color: '#005BAB', opacity: 0.9, marginTop: '2px' }}>
+                  {totalApps} Total Dilamar • {interviewApps} Respons Panggilan
+                </div>
+              </div>
+            </div>
+
+            <button 
+              className="hn-btn-primary"
+              style={{ fontSize: '12px', padding: '8px 12px' }}
+              onClick={() => setActiveTab('job')}
+            >
+              Buka Tracker <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* --- FITUR UTAMA 1: KARTU GANTI OLI --- */}
+      <div>
+        <div style={{ marginBottom: '10px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#005BAB' }}>
+            FITUR UTAMA 1: KARTU GANTI OLI
           </h3>
         </div>
 

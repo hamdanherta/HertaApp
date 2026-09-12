@@ -4,6 +4,7 @@ import { BottomNav } from './components/BottomNav';
 import { HamburgerMenu } from './components/HamburgerMenu';
 import { DashboardView } from './components/DashboardView';
 import { OilMeterView } from './components/OilMeterView';
+import { JobTrackerView } from './components/JobTrackerView';
 import { NotifikasiView } from './components/NotifikasiView';
 import { FavoritView } from './components/FavoritView';
 import { ProfilView } from './components/ProfilView';
@@ -12,6 +13,8 @@ import { SplashScreen } from './components/SplashScreen';
 import { 
   loadVehicles, 
   saveVehicles, 
+  loadApplications,
+  saveApplications,
   loadDebts, 
   saveDebts, 
   loadSettings, 
@@ -23,6 +26,7 @@ import {
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [vehicles, setVehicles] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [debts, setDebts] = useState([]);
   const [settings, setSettings] = useState({});
   const [patokan, setPatokan] = useState(null);
@@ -30,9 +34,10 @@ export default function App() {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const [showBackupModal, setShowBackupModal] = useState(false);
 
-  // Load initial  data
+  // Load initial data
   const refreshData = () => {
     setVehicles(loadVehicles());
+    setApplications(loadApplications());
     setDebts(loadDebts());
     setSettings(loadSettings());
     setPatokan(loadPatokan());
@@ -46,6 +51,11 @@ export default function App() {
   const handleSaveVehicles = (newVehicles) => {
     setVehicles(newVehicles);
     saveVehicles(newVehicles);
+  };
+
+  const handleSaveApplications = (newApps) => {
+    setApplications(newApps);
+    saveApplications(newApps);
   };
 
   const handleSaveDebts = (newDebts) => {
@@ -91,6 +101,7 @@ export default function App() {
           <DashboardView 
             vehicles={vehicles}
             onSaveVehicles={handleSaveVehicles}
+            applications={applications}
             settings={settings}
             setActiveTab={setActiveTab}
           />
@@ -105,6 +116,12 @@ export default function App() {
           />
         )}
 
+        {activeTab === 'job' && (
+          <JobTrackerView 
+            applications={applications}
+            onSaveApplications={handleSaveApplications}
+          />
+        )}
 
         {activeTab === 'notifikasi' && (
           <NotifikasiView 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Gauge, HandCoins, HardDriveDownload, Home, Bell, Heart, User, PlusCircle, ShieldCheck, ChevronRight, Settings } from 'lucide-react';
+import { X, Gauge, Briefcase, HardDriveDownload, Home, Bell, Heart, User, PlusCircle, ShieldCheck, ChevronRight, Settings } from 'lucide-react';
 
 export const HamburgerMenu = ({ isOpen, onClose, onSelectMenu }) => {
   if (!isOpen) return null;
@@ -89,7 +89,33 @@ export const HamburgerMenu = ({ isOpen, onClose, onSelectMenu }) => {
                 <Gauge size={22} color="#005BAB" />
               </div>
               <div>
-                <div style={{ fontSize: '15px', fontWeight: '800', color: '#005BAB' }}>Catatan Ganti Oli</div>
+                <div style={{ fontSize: '14px', fontWeight: '800', color: '#005BAB' }}>Fitur 1: Catatan Ganti Oli</div>
+              </div>
+            </div>
+            <ChevronRight size={18} color="#005BAB" />
+          </button>
+
+          {/* Feature 2: Catatan Lamaran Kerja */}
+          <button 
+            className="hn-card"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '14px',
+              textAlign: 'left',
+              backgroundColor: '#FFF3DD',
+              color: '#005BAB',
+              cursor: 'pointer'
+            }}
+            onClick={() => handleMenuClick('job')}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ padding: '8px', backgroundColor: '#FFFFFF', borderRadius: '10px', border: '1.5px solid #005BAB', color: '#005BAB' }}>
+                <Briefcase size={22} color="#005BAB" />
+              </div>
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: '800', color: '#005BAB' }}>Fitur 2: Catatan Lamaran Kerja</div>
               </div>
             </div>
             <ChevronRight size={18} color="#005BAB" />

@@ -1,28 +1,57 @@
 import React from 'react';
-import { Bell, ShieldAlert, CheckCircle2, Gauge } from 'lucide-react';
-import { formatKm } from '../utils/formatters';
+import { Bell, ShieldAlert, CheckCircle2, Gauge, Clock, ArrowRight, Calendar } from 'lucide-react';
+import { formatKm, formatDate } from '../utils/formatters';
 
 export const NotifikasiView = ({ vehicles = [], onNavigate }) => {
-  // Oil alerts
-  const urgentOilVehicles = (vehicles || []).filter(v => {
-    const lastOil = v.lastOilKm || 0;
+  // Helper to calculate days since last oil change
+  const getDaysSinceLastOil = (dateString) => {
+    if (!dateString) return 30; // Default if not recorded yet
+    const lastDate = new Date(dateString);
+    const now = new Date();
+    const diffTime = now.getTime() - lastDate.getTime();
+    return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+  };
+
+  // Filter vehicles that need oil change alert (either 30+ days OR reached interval target)
+  const notificationVehicles = (vehicles || []).map(v => {
+    const lastOil = parseInt(v.lastOilKm || 0, 10);
     const interval = parseInt(v.intervalMesin || 1500, 10);
     const targetKm = lastOil + interval;
-    return targetKm > 0;
-  });
+    const daysElapsed = getDaysSinceLastOil(v.lastOilDate);
 
-  const hasNotifications = urgentOilVehicles.length > 0;
+    const is30DaysReached = daysElapsed >= 30;
+    const isTargetKmReached = targetKm > 0;
+
+    return {
+      ...v,
+      lastOil,
+      interval,
+      targetKm,
+      daysElapsed,
+      isTriggered: is30DaysReached || isTargetKmReached,
+      reason: is30DaysReached 
+        ? `Pengingat Otomatis 30 Hari (${daysElapsed} hari sejak ganti oli)` 
+        : `Mendekati Target KM (${formatKm(targetKm)})`
+    };
+  }).filter(v => v.isTriggered);
+
+  const hasNotifications = notificationVehicles.length > 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '150px' }}>
       
+      {/* Banner Header */}
       <div className="hn-card" style={{ backgroundColor: '#FFF3DD' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Bell size={22} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ padding: '8px', backgroundColor: '#FFFFFF', borderRadius: '12px', border: '2px solid #005BAB' }}>
+            <Bell size={24} color="#005BAB" />
+          </div>
           <div>
-            <h2 style={{ fontSize: '18px', fontWeight: '800' }}>Notifikasi & Pengingat</h2>
-            <div style={{ fontSize: '12px', opacity: 0.9, marginTop: '2px' }}>
-              Peringatan jadwal ganti oli kendaraan Anda
+            <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#005BAB' }}>
+              Notifikasi & Pengingat
+            </h2>
+            <div style={{ fontSize: '12px', fontWeight: '600', color: '#005BAB', opacity: 0.9, marginTop: '2px' }}>
+              Otomatis mengingatkan setiap 30 hari dari ganti oli terakhir
             </div>
           </div>
         </div>
@@ -30,40 +59,99 @@ export const NotifikasiView = ({ vehicles = [], onNavigate }) => {
 
       {!hasNotifications ? (
         <div className="hn-card" style={{ textAlign: 'center', padding: '36px 16px' }}>
-          <CheckCircle2 size={42} style={{ margin: '0 auto 10px', display: 'block' }} />
-          <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Semua Aman!</h3>
-          <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px' }}>
-            Tidak ada peringatan oli mendesak saat ini.
+          <CheckCircle2 size={42} style={{ margin: '0 auto 10px', display: 'block', color: '#005BAB' }} />
+          <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#005BAB' }}>Semua Aman!</h3>
+          <p style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px', color: '#005BAB' }}>
+            Tidak ada pengingat oli mendesak atau 30 hari saat ini.
           </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {urgentOilVehicles.map(v => {
-            const lastOil = v.lastOilKm || 0;
-            const interval = parseInt(v.intervalMesin || 1500, 10);
-            const targetKm = lastOil + interval;
-            return (
-              <div key={v.id} className="hn-card" style={{ backgroundColor: '#FFF3DD' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <ShieldAlert size={24} color="#005BAB" />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '12px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB' }}>Peringatan Oli Motor/Mobil</div>
-                    <h4 style={{ fontSize: '16px', fontWeight: '800', marginTop: '2px', color: '#005BAB' }}>{v.name} ({v.licensePlate || 'BH 6043 OX'})</h4>
-                    <p style={{ fontSize: '12px', marginTop: '4px', fontWeight: '600', color: '#005BAB' }}>
-                      Ganti Oli Terakhir: KM {formatKm(lastOil)} • Target Selanjutnya: KM {formatKm(targetKm)} (Patokan: {formatKm(interval)})
-                    </p>
-                    <button 
-                      className="hn-btn-primary" 
-                      style={{ marginTop: '10px', padding: '6px 12px', fontSize: '12px' }}
-                      onClick={() => onNavigate('oil')}
-                    >
-                      Buka Catatan Oli
-                    </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {notificationVehicles.map(v => (
+            <div key={v.id} className="hn-card" style={{ backgroundColor: '#FFF3DD', padding: '18px' }}>
+              
+              {/* Header: Warning Title & Small Vehicle Badge (Identical to Beranda Card) */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <ShieldAlert size={20} color="#005BAB" />
+                  <span style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', letterSpacing: '0.5px' }}>
+                    Peringatan Ganti Oli
+                  </span>
+                </div>
+
+                {/* Small Vehicle Label Badge (Scoopy Keong / BH 6043 OX below) */}
+                <div className="hn-badge-cream" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '6px 10px', lineHeight: '1.2' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '800' }}>
+                    🏍️ {v.name}
+                  </span>
+                  <span style={{ fontSize: '10px', opacity: 0.85, fontWeight: '700' }}>
+                    ({v.licensePlate || 'BH 6043 OX'})
+                  </span>
+                </div>
+              </div>
+
+              {/* Big KM Hierarchy Numbers Container */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr auto 1fr', 
+                alignItems: 'center', 
+                gap: '10px', 
+                marginTop: '14px', 
+                backgroundColor: '#FFFFFF', 
+                padding: '14px 12px', 
+                borderRadius: '16px', 
+                border: '2px solid #005BAB',
+                boxShadow: '2px 2px 0px #005BAB'
+              }}>
+                {/* Last Oil KM */}
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
+                    Oli Terakhir
+                  </div>
+                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB', marginTop: '2px' }}>
+                    {formatKm(v.lastOil)}
+                  </div>
+                </div>
+
+                {/* Arrow Divider */}
+                <div style={{ color: '#005BAB', opacity: 0.6 }}>
+                  <ArrowRight size={20} />
+                </div>
+
+                {/* Next Target KM (Big Bold Font) */}
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8 }}>
+                    Target Selanjutnya
+                  </div>
+                  <div style={{ fontSize: '20px', fontWeight: '800', color: '#005BAB', marginTop: '2px' }}>
+                    {formatKm(v.targetKm)}
                   </div>
                 </div>
               </div>
-            );
-          })}
+
+              {/* 30-Day Reminder Badge Info & Interval */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px', fontSize: '11px', fontWeight: '700' }}>
+                <span className="hn-badge-solid" style={{ fontSize: '11px' }}>
+                  <Clock size={12} /> {v.reason}
+                </span>
+                <span className="hn-badge-outline" style={{ fontSize: '11px' }}>
+                  <Gauge size={12} /> Patokan: {formatKm(v.interval)}
+                </span>
+              </div>
+
+              {/* Action Button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '14px' }}>
+                <button 
+                  className="hn-btn-primary" 
+                  style={{ padding: '8px 16px', fontSize: '12px' }}
+                  onClick={() => onNavigate('oil')}
+                >
+                  <Gauge size={14} /> Buka Catatan Oli
+                </button>
+              </div>
+
+            </div>
+          ))}
         </div>
       )}
 

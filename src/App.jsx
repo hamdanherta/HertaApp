@@ -4,11 +4,11 @@ import { BottomNav } from './components/BottomNav';
 import { HamburgerMenu } from './components/HamburgerMenu';
 import { DashboardView } from './components/DashboardView';
 import { OilMeterView } from './components/OilMeterView';
-import { DebtTrackerView } from './components/DebtTrackerView';
 import { NotifikasiView } from './components/NotifikasiView';
 import { FavoritView } from './components/FavoritView';
 import { ProfilView } from './components/ProfilView';
 import { BackupModal } from './components/BackupModal';
+import { SplashScreen } from './components/SplashScreen';
 import { 
   loadVehicles, 
   saveVehicles, 
@@ -21,11 +21,12 @@ import {
 } from './utils/storage';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [vehicles, setVehicles] = useState([]);
   const [debts, setDebts] = useState([]);
   const [settings, setSettings] = useState({});
   const [patokan, setPatokan] = useState(null);
-  const [activeTab, setActiveTab] = useState('beranda'); // 'beranda', 'notifikasi', 'favorit', 'profil', 'oil', 'debt'
+  const [activeTab, setActiveTab] = useState('beranda');
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const [showBackupModal, setShowBackupModal] = useState(false);
 
@@ -73,6 +74,11 @@ export default function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
       
+      {/* 3-Second Modern Splash Screen */}
+      {showSplash && (
+        <SplashScreen onFinish={() => setShowSplash(false)} />
+      )}
+
       {/* Top Header with Hamburger Button */}
       <Header 
         onOpenMenu={() => setShowHamburgerMenu(true)} 

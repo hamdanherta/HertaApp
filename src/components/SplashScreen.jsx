@@ -64,7 +64,7 @@ export const SplashScreen = ({ onFinish }) => {
             opacity: 0.85, 
             marginTop: '4px' 
           }}>
-            Catatan Pengingat Oli Kendaraan
+            Semua Kesempurnaan dalam Satu App
           </p>
         </div>
 

@@ -70,7 +70,7 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, settings = {}, se
           Herta App
         </h2>
         <p style={{ fontSize: '12px', opacity: 0.9, marginTop: '4px' }}>
-          Data tersimpan 100% aman di HP Anda.
+          All in App 
         </p>
       </div>
 

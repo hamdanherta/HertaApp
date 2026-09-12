@@ -3,7 +3,13 @@ import { Menu, Gauge, Download, ShieldCheck } from 'lucide-react';
 
 export const Header = ({ onOpenMenu, onOpenBackup }) => {
   return (
-    <header className="hn-card-brand" style={{ borderRadius: '0 0 24px 24px', margin: 0, borderWidth: '0 0 3px 0' }}>
+    <header className="hn-card-brand" style={{
+      borderRadius: '0 0 24px 24px',
+      margin: 0,
+      borderWidth: '0 0 3px 0',
+      paddingTop: 'calc(16px + env(safe-area-inset-top, 0px))',
+      paddingBottom: '16px'
+    }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         
         {/* Left: Hamburger Menu Button */}

@@ -226,7 +226,7 @@ export const OilMeterView = ({ vehicles = [], onSaveVehicles }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '130px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '150px' }}>
 
       {/* --- DATA KENDARAAN SELECTOR --- */}
       <div className="hn-card" style={{ borderRadius: '24px', backgroundColor: '#FFFFFF', border: '2px solid #005BAB' }}>

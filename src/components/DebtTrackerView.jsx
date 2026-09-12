@@ -224,7 +224,7 @@ export const DebtTrackerView = ({ debts, onSaveDebts, autoOpenAddModal = false }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '130px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '150px' }}>
 
       {/* Top Financial Header Summary */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>

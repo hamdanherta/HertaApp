@@ -59,7 +59,7 @@ export const DashboardView = ({ vehicles = [], onSaveVehicles, settings = {}, se
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '130px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', paddingBottom: '150px' }}>
       
       {/* Overview Greeting with Dynamic Owner Name */}
       <div className="hn-card-brand">

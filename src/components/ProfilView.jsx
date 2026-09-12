@@ -24,7 +24,7 @@ export const ProfilView = ({ settings = {}, onSaveSettings, onOpenBackup, onRefr
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '130px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '150px' }}>
       
       {/* Profile Header */}
       <div className="hn-card-brand">

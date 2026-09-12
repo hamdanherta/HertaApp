@@ -15,7 +15,7 @@ export const NotifikasiView = ({ vehicles, debts, onNavigate }) => {
   const hasNotifications = urgentOilVehicles.length > 0 || dueDebts.length > 0;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '130px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '150px' }}>
       
       <div className="hn-card" style={{ backgroundColor: '#FFF3DD' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

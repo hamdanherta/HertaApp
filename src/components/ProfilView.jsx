@@ -92,6 +92,22 @@ export const ProfilView = ({ settings = {}, onSaveSettings, onOpenBackup, onRefr
         </div>
       </div>
 
+      {/* About Section */}
+      <div className="hn-card" style={{ textAlign: 'center', backgroundColor: '#FFF3DD', border: '2px solid #005BAB', padding: '16px 14px' }}>
+        <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#005BAB', opacity: 0.8, letterSpacing: '0.5px' }}>
+          Dikembangkan oleh
+        </div>
+        <div style={{ fontSize: '16px', fontWeight: '900', color: '#005BAB', marginTop: '2px' }}>
+          Herta Devlabs
+        </div>
+        <div style={{ fontSize: '12px', fontWeight: '700', color: '#005BAB', opacity: 0.9, marginTop: '2px' }}>
+          Hamdani - Founder
+        </div>
+        <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1.5px dashed #005BAB', fontSize: '11px', fontWeight: '800', color: '#005BAB' }}>
+          Versi 1.12.0
+        </div>
+      </div>
+
       {/* Reset Confirmation Modal */}
       {showResetConfirm && (
         <div className="hn-modal-overlay">
